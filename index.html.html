@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoBubble - Xà phòng thiên nhiên | Nâng niu làn da mỗi ngày</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sage: {
+                            50: '#f4f7f4',
+                            100: '#e3ebd0',
+                            200: '#c5d7a6',
+                            300: '#a3c078',
+                            400: '#83a851',
+                            500: '#688d37',
+                            600: '#50702a',
+                            700: '#3f5723',
+                            800: '#344720',
+                            900: '#2d3c1d',
+                        },
+                        cream: '#faf7f2',
+                        sand: '#e8dfd1',
+                        earth: '#6e5d4f'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        html { scroll-padding-top: 88px; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #faf7f2;
+            color: #2d3c1d;
+        }
+        .bg-cream { background-color: #faf7f2; }
+        .glass-header {
+            background: rgba(250, 247, 242, 0.9);
+            backdrop-filter: blur(12px);
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .serif { font-family: Georgia, 'Times New Roman', serif; }
+        .product-card { transition: transform .2s ease, box-shadow .2s ease; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 18px 40px #34472018; }
+        .soap-art { background: radial-gradient(circle at 50% 42%, #edf1df, #dce6cf 70%, #d3ddc3); }
+        .soap { background: linear-gradient(145deg, #f2e9ce, #d9c99f); box-shadow: inset 0 4px 10px #fff9, inset 0 -7px 12px #72654430, 0 18px 24px #34472025; border-radius: 20px 22px 27px 19px; }
+        .reveal { opacity: 0; transform: translateY(16px); transition: opacity .5s ease, transform .5s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .focus-ring:focus-visible { outline: 3px solid #83a851; outline-offset: 3px; }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } .reveal { opacity: 1; transform: none; } }
+    </style>
+</head>
+<body class="relative antialiased selection:bg-sage-200 selection:text-sage-900">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-sage-800 text-white px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3 border border-sage-600">
+            <div class="w-7 h-7 bg-sage-500 rounded-full flex items-center justify-center text-xs text-white">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <span id="toast-message" class="text-sm font-medium">Đã thêm vào giỏ hàng!</span>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+<header class="fixed top-0 left-0 right-0 z-40 glass-header border-b border-sage-100 transition-all duration-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-2.5 group">
+                    <div class="w-10 h-10 rounded-2xl bg-sage-600 flex items-center justify-center text-white text-xl shadow-md group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-soap"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-2xl font-bold tracking-tight text-sage-900 leading-none">EcoBubble</span>
+                        <span class="text-[10px] tracking-widest text-sage-600 font-medium uppercase mt-0.5">Xà phòng thiên nhiên</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-7 text-sm font-medium text-sage-800">
+                    <a href="#about" class="hover:text-sage-500 transition-colors">Câu chuyện</a>
+                    <a href="#products" class="hover:text-sage-500 transition-colors">Sản phẩm</a>
+                    <a href="#combos" class="hover:text-sage-500 transition-colors">Bộ quà tặng</a>
+                    <a href="#4no" class="hover:text-sage-500 transition-colors">Giá trị của chúng mình</a>
+                    <a href="#target" class="hover:text-sage-500 transition-colors">Dành cho bạn</a>
+                    <a href="#usage" class="hover:text-sage-500 transition-colors">Cách sử dụng</a>
+                    <a href="#reviews" class="hover:text-sage-500 transition-colors">Cảm nhận</a>
+                </nav>
+
+                <!-- Actions -->
+                <div class="flex items-center gap-4">
+                    <!-- Cart Button -->
+                    <button onclick="toggleCart()" aria-label="Mở giỏ hàng" class="focus-ring relative p-3 text-sage-800 hover:text-sage-600 bg-sage-100/70 hover:bg-sage-100 rounded-2xl transition-all">
+                        <i class="fa-solid fa-bag-shopping text-lg"></i>
+                        <span id="cart-badge" class="absolute -top-1 -right-1 bg-amber-600 text-white text-[11px] font-bold w-5 h-5 rounded-full items-center justify-center border-2 border-cream hidden">0</span>
+                    </button>
+
+                    <a href="#products" class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 rounded-2xl bg-sage-600 hover:bg-sage-700 text-white font-medium text-sm shadow-md shadow-sage-600/20 transition-all hover:shadow-lg hover:-translate-y-0.5">
+                        Mua ngay
+                    </a>
+
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-sage-800 focus:outline-none">
+<i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Drawer -->
+        <div id="mobile-menu" class="hidden md:hidden bg-cream border-b border-sage-100 px-4 pt-2 pb-6 space-y-3">
+            <a href="#about" onclick="toggleMobileMenu()" class="block py-2 text-sage-800 font-medium hover:text-sage-600">Câu chuyện</a>
+            <a href="#products" onclick="toggleMobileMenu()" class="block py-2 text-sage-800 font-medium hover:text-sage-600">Sản phẩm</a>
+            <a href="#combos" onclick="toggleMobileMenu()" class="block py-2 text-sage-800 font-medium hover:text-sage-600">Bộ quà tặng</a>
+            <a href="#4no" onclick="toggleMobileMenu()" class="block py-2 text-sage-800 font-medium hover:text-sage-600">Giá trị của chúng mình</a>
+            <a href="#target" onclick="toggleMobileMenu()" class="block py-2 text-sage-800 font-medium hover:text-sage-600">Dành cho bạn</a>
+            <a href="#usage" onclick="toggleMobileMenu()" class="block py-2 text-sage-800 font-medium hover:text-sage-600">Cách sử dụng</a>
+            <a href="#reviews" onclick="toggleMobileMenu()" class="block py-2 text-sage-800 font-medium hover:text-sage-600">Cảm nhận</a>
+            <a href="#contact" onclick="toggleMobileMenu()" class="block py-2 text-sage-800 font-medium hover:text-sage-600">Liên hệ</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-28 pb-16 md:pt-36 md:pb-24 overflow-hidden relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Hero Left Content -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sage-100/80 border border-sage-200 text-sage-800 text-xs sm:text-sm font-medium">
+                        <span class="w-2 h-2 rounded-full bg-sage-500 animate-pulse"></span>
+                        ECOBUBBLE · Dịu dàng chăm sóc làn da
+                    </div>
+
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-sage-900 leading-tight">
+                        XÀ PHÒNG THIÊN NHIÊN<br>
+                        <span class="text-sage-600 font-normal italic">Nâng niu làn da mỗi ngày</span>
+                    </h1>
+
+                    <p class="text-xs sm:text-base md:text-lg text-sage-700 font-medium max-w-2xl mx-auto lg:mx-0 flex flex-wrap justify-center lg:justify-start gap-x-3 gap-y-1">
+                        <span>Cảm hứng từ thiên nhiên</span> •
+                        <span>Dịu dàng mỗi ngày</span> •
+                        <span>Chăm sóc làn da</span> •
+                        <span>Sống xanh hơn</span>
+</p>
+
+                    <div class="p-5 rounded-2xl bg-white/80 border border-sage-200/80 backdrop-blur-sm max-w-xl mx-auto lg:mx-0 shadow-sm">
+                        <p class="text-sage-800 text-sm sm:text-base font-medium italic">
+                            “Một bánh xà phòng nhỏ, cho những phút giây chăm sóc bản thân dịu dàng.”
+                        </p>
+                        <p class="text-xs sm:text-sm text-sage-600 mt-2 leading-relaxed">
+                            EcoBubble mang đến những bánh xà phòng lấy cảm hứng từ thiên nhiên, để mỗi lần sử dụng trở thành một phút giây chăm sóc bản thân nhẹ nhàng.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                        <a href="#products" class="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-sage-600 hover:bg-sage-700 text-white font-semibold text-center shadow-lg shadow-sage-600/30 transition-all hover:scale-[1.02]">
+                            Mua ngay
+                        </a>
+                        <a href="#combos" class="w-full sm:w-auto px-8 py-3.5 rounded-2xl border border-sage-300 text-sage-800 font-semibold text-center hover:bg-sage-100 transition-all">
+                            Khám phá bộ quà
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="px-4 py-20 sm:px-6 md:py-28">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+            <div class="reveal relative max-w-lg mx-auto w-full rounded-[2rem] bg-sage-100 p-10 sm:p-14 min-h-80 flex items-center justify-center overflow-hidden"><div class="absolute -right-12 -top-12 w-56 h-56 rounded-full border-[28px] border-white/30"></div><div class="soap relative z-10 w-64 h-40 -rotate-12 flex items-center justify-center"><span class="serif text-3xl italic text-sage-800/70">EcoBubble</span></div><span class="absolute bottom-6 left-6 text-xs uppercase tracking-[.2em] text-sage-800/60">Một phút dịu dàng cho bạn</span></div>
+            <div class="reveal"><p class="text-xs font-bold tracking-[.2em] text-sage-600">CÂU CHUYỆN ECOBUBBLE</p><h2 class="serif mt-4 text-4xl sm:text-5xl text-sage-900">Chậm lại một chút.<br><em class="text-sage-600">Dịu dàng với chính mình.</em></h2><p class="mt-6 leading-8 text-sage-800/75">EcoBubble bắt đầu từ một ý tưởng giản dị: biến việc chăm sóc bản thân thành một khoảng nghỉ nhẹ nhàng. Chúng mình lấy cảm hứng từ thiên nhiên, yêu sự tối giản và tin rằng những thói quen nhỏ có thể mang lại niềm vui mỗi ngày.</p><p class="mt-4 leading-8 text-sage-800/75">Hãy đọc kỹ thông tin sản phẩm, chọn loại phù hợp với nhu cầu của bạn và tận hưởng khoảng thời gian chăm sóc bản thân theo cách riêng.</p></div>
+        </div>
+    </section>
+
+    <section id="products" class="scroll-mt-20 bg-white/60 px-4 py-20 sm:px-6 md:py-28">
+        <div class="max-w-7xl mx-auto"><div class="reveal flex flex-col md:flex-row md:items-end justify-between gap-5"><div><p class="text-xs font-bold tracking-[.2em] text-sage-600">BỘ SƯU TẬP</p><h2 class="serif mt-3 text-4xl sm:text-5xl text-sage-900">Chọn mùi hương<br><em class="text-sage-600">dành riêng cho bạn.</em></h2></div><p class="max-w-md leading-7 text-sage-800/70">Mỗi sản phẩm mang một cảm hứng riêng. Cùng khám phá lựa chọn phù hợp với thói quen chăm sóc hằng ngày của bạn.</p></div>
+            <div class="flex gap-2 overflow-x-auto no-scrollbar py-7" aria-label="Lọc sản phẩm"><button class="filter-btn rounded-full bg-sage-800 px-5 py-2.5 text-sm font-semibold text-white" data-filter="all">Tất cả</button><button class="filter-btn rounded-full border border-sage-200 bg-white px-5 py-2.5 text-sm font-semibold" data-filter="fresh">Tươi mát</button><button class="filter-btn rounded-full border border-sage-200 bg-white px-5 py-2.5 text-sm font-semibold" data-filter="calm">Thư giãn</button><button class="filter-btn rounded-full border border-sage-200 bg-white px-5 py-2.5 text-sm font-semibold" data-filter="gift">Quà tặng</button></div>
+            <div id="product-grid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5"></div><p class="mt-6 text-center text-xs text-sage-800/50">Sản phẩm, giá bán và thành phần là dữ liệu minh họa cho bài tập.</p>
+        </div>
+    </section>
+
+    <section id="4no" class="px-4 py-20 sm:px-6 md:py-28"><div class="max-w-7xl mx-auto"><div class="reveal text-center max-w-2xl mx-auto"><p class="text-xs font-bold tracking-[.2em] text-sage-600">GIÁ TRỊ CỦA CHÚNG MÌNH</p><h2 class="serif mt-3 text-4xl sm:text-5xl text-sage-900">Bốn điều <em class="text-sage-600">EcoBubble luôn hướng đến.</em></h2><p class="mt-4 leading-7 text-sage-800/70">Chúng mình trân trọng sự minh bạch, giản dị và trải nghiệm chăm sóc chu đáo.</p></div><div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <article class="reveal rounded-3xl border border-sage-100 bg-white p-7"><i class="fa-solid fa-seedling text-2xl text-sage-600"></i><p class="mt-5 text-xs font-bold tracking-widest text-sage-500">01 · CẢM HỨNG</p><h3 class="serif mt-2 text-2xl">Gần gũi thiên nhiên</h3><p class="mt-3 text-sm leading-6 text-sage-800/65">Tìm cảm hứng từ những điều bình dị và gần gũi quanh ta.</p></article>
+            <article class="reveal rounded-3xl border border-sage-100 bg-white p-7"><i class="fa-solid fa-list-check text-2xl text-sage-600"></i><p class="mt-5 text-xs font-bold tracking-widest text-sage-500">02 · THÔNG TIN</p><h3 class="serif mt-2 text-2xl">Rõ ràng, dễ hiểu</h3><p class="mt-3 text-sm leading-6 text-sage-800/65">Cung cấp thông tin minh bạch, khuyến khích bạn đọc kỹ hướng dẫn sử dụng.</p></article>
+            <article class="reveal rounded-3xl border border-sage-100 bg-white p-7"><i class="fa-solid fa-box-open text-2xl text-sage-600"></i><p class="mt-5 text-xs font-bold tracking-widest text-sage-500">03 · ĐÓNG GÓI</p><h3 class="serif mt-2 text-2xl">Đơn giản, gọn gàng</h3><p class="mt-3 text-sm leading-6 text-sage-800/65">Ưu tiên cách đóng gói tinh gọn, hạn chế những chi tiết không cần thiết.</p></article>
+            <article class="reveal rounded-3xl border border-sage-100 bg-white p-7"><i class="fa-solid fa-heart text-2xl text-sage-600"></i><p class="mt-5 text-xs font-bold tracking-widest text-sage-500">04 · TÔN TRỌNG</p><h3 class="serif mt-2 text-2xl">Tôn trọng làn da</h3><p class="mt-3 text-sm leading-6 text-sage-800/65">Mỗi làn da có nhu cầu riêng; hãy chọn sản phẩm phù hợp với bạn.</p></article>
+        </div></div></section>
+
+    <section id="combos" class="scroll-mt-20 bg-sage-800 px-4 py-16 text-white sm:px-6 md:py-20"><div class="max-w-7xl mx-auto grid md:grid-cols-[1fr_auto] gap-8 items-center"><div class="reveal"><p class="text-xs font-bold tracking-[.2em] text-sage-200">BỘ ĐÔI GỬI THƯƠNG</p><h2 class="serif mt-3 text-4xl sm:text-5xl">Một món quà nhỏ,<br><em class="text-sage-200">nhiều niềm vui xanh.</em></h2><p class="mt-4 max-w-xl leading-7 text-white/70">Hai bánh xà phòng trong gói quà tối giản — một lựa chọn đáng yêu để gửi lời cảm ơn.</p></div><div class="reveal flex flex-col items-center gap-3 rounded-3xl bg-white/10 p-7 text-center"><span class="text-sm text-white/70">Bộ quà minh họa từ</span><strong class="text-3xl">159.000₫</strong><button class="add-product rounded-2xl bg-white px-6 py-3 font-semibold text-sage-900" data-id="gift-set">Thêm bộ quà vào giỏ <i class="fa-solid fa-arrow-right ml-2"></i></button></div></div></section>
+
+    <section id="target" class="scroll-mt-20 px-4 py-20 sm:px-6 md:py-28"><div class="max-w-7xl mx-auto"><div class="reveal text-center"><p class="text-xs font-bold tracking-[.2em] text-sage-600">DÀNH CHO NHỮNG NGÀY BẠN MUỐN SỐNG CHẬM</p><h2 class="serif mt-3 text-4xl sm:text-5xl">Một chút dịu dàng dành cho <em class="text-sage-600">bạn.</em></h2></div><div class="mt-10 grid md:grid-cols-3 gap-5"><article class="reveal rounded-3xl bg-sage-100 p-8"><span class="serif text-5xl text-sage-500/60">01</span><h3 class="serif mt-4 text-2xl">Người yêu sự tối giản</h3><p class="mt-3 leading-7 text-sage-800/70">Bạn yêu những món đồ thiết yếu, dễ sử dụng và có thiết kế nhẹ nhàng.</p></article><article class="reveal rounded-3xl bg-[#f1e8dc] p-8"><span class="serif text-5xl text-amber-700/50">02</span><h3 class="serif mt-4 text-2xl">Người đang tìm quà</h3><p class="mt-3 leading-7 text-sage-800/70">Một món quà nhỏ để gửi lời cảm ơn, lời chúc hay sự quan tâm chân thành.</p></article><article class="reveal rounded-3xl bg-[#e8e4ec] p-8"><span class="serif text-5xl text-purple-800/40">03</span><h3 class="serif mt-4 text-2xl">Người thích khám phá</h3><p class="mt-3 leading-7 text-sage-800/70">Bạn muốn thử một thói quen mới và dành thêm thời gian chăm sóc bản thân.</p></article></div></div></section>
+
+    <section id="usage" class="scroll-mt-20 bg-white/60 px-4 py-20 sm:px-6 md:py-24"><div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12"><div class="reveal"><p class="text-xs font-bold tracking-[.2em] text-sage-600">CHĂM SÓC NHẸ NHÀNG MỖI NGÀY</p><h2 class="serif mt-3 text-4xl sm:text-5xl">Cách sử dụng<br><em class="text-sage-600">thật nhẹ nhàng.</em></h2><p class="mt-5 leading-7 text-sage-800/70">Sau khi sử dụng, đặt bánh ở nơi khô thoáng để bánh ráo nước giữa các lần dùng.</p><p class="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-sage-800/80"><i class="fa-solid fa-circle-info mr-2 text-amber-700"></i>Ngừng sử dụng nếu có dấu hiệu kích ứng. Tránh tiếp xúc với mắt; để xa tầm tay trẻ nhỏ.</p></div><div class="grid sm:grid-cols-2 gap-4"><article class="reveal rounded-3xl border border-sage-100 bg-white p-6"><b class="flex w-10 h-10 items-center justify-center rounded-full bg-sage-700 text-white">1</b><h3 class="mt-4 font-bold">Làm ướt</h3><p class="mt-2 text-sm leading-6 text-sage-800/65">Làm ướt tay hoặc vùng da cần làm sạch.</p></article><article class="reveal rounded-3xl border border-sage-100 bg-white p-6"><b class="flex w-10 h-10 items-center justify-center rounded-full bg-sage-700 text-white">2</b><h3 class="mt-4 font-bold">Tạo bọt</h3><p class="mt-2 text-sm leading-6 text-sage-800/65">Xoa bánh giữa hai tay để tạo lớp bọt mềm.</p></article><article class="reveal rounded-3xl border border-sage-100 bg-white p-6"><b class="flex w-10 h-10 items-center justify-center rounded-full bg-sage-700 text-white">3</b><h3 class="mt-4 font-bold">Rửa sạch</h3><p class="mt-2 text-sm leading-6 text-sage-800/65">Xoa nhẹ nhàng rồi rửa sạch lại bằng nước.</p></article><article class="reveal rounded-3xl border border-sage-100 bg-white p-6"><b class="flex w-10 h-10 items-center justify-center rounded-full bg-sage-700 text-white">4</b><h3 class="mt-4 font-bold">Để khô</h3><p class="mt-2 text-sm leading-6 text-sage-800/65">Đặt bánh trên khay thoát nước, nơi khô thoáng.</p></article></div></div></section>
+
+    <section id="reviews" class="scroll-mt-20 px-4 py-20 sm:px-6 md:py-28"><div class="max-w-7xl mx-auto"><div class="reveal text-center"><p class="text-xs font-bold tracking-[.2em] text-sage-600">LỜI THƯƠNG GỬI LẠI</p><h2 class="serif mt-3 text-4xl sm:text-5xl">Những cảm nhận <em class="text-sage-600">dịu dàng.</em></h2><p class="mt-3 text-xs text-sage-800/50">Đánh giá minh họa giao diện.</p></div><div class="mt-9 grid md:grid-cols-3 gap-5"><blockquote class="reveal rounded-3xl bg-white p-7 border border-sage-100"><span class="text-amber-500">★★★★★</span><p class="serif mt-4 text-xl leading-8">“Mùi hương nhẹ, thiết kế xinh và gói quà rất tinh tế.”</p><footer class="mt-5 text-sm font-semibold text-sage-700">— An Nhiên</footer></blockquote><blockquote class="reveal rounded-3xl bg-white p-7 border border-sage-100"><span class="text-amber-500">★★★★★</span><p class="serif mt-4 text-xl leading-8">“Mình thích biến việc tắm thành một khoảng nghỉ nhỏ.”</p><footer class="mt-5 text-sm font-semibold text-sage-700">— Minh Thư</footer></blockquote><blockquote class="reveal rounded-3xl bg-white p-7 border border-sage-100"><span class="text-amber-500">★★★★★</span><p class="serif mt-4 text-xl leading-8">“Một món quà dễ thương, bạn mình rất vui khi nhận.”</p><footer class="mt-5 text-sm font-semibold text-sage-700">— Lan Phương</footer></blockquote></div></div></section>
+
+    <section class="bg-sage-100/60 px-4 py-16 sm:px-6"><div class="max-w-3xl mx-auto"><p class="text-xs font-bold tracking-[.2em] text-sage-600">GIẢI ĐÁP NHANH</p><h2 class="serif mt-3 mb-7 text-4xl text-sage-900">Bạn đang băn khoăn?</h2><div class="space-y-3"><details class="group rounded-2xl bg-white p-5"><summary class="cursor-pointer font-semibold">Xà phòng bánh có phù hợp với mọi loại da không?<i class="fa-solid fa-plus float-right text-sage-600 transition group-open:rotate-45"></i></summary><p class="mt-3 text-sm leading-6 text-sage-800/70">Mỗi làn da có nhu cầu khác nhau. Hãy đọc kỹ thành phần, thử trên vùng da nhỏ trước khi dùng và hỏi chuyên gia khi cần.</p></details><details class="group rounded-2xl bg-white p-5"><summary class="cursor-pointer font-semibold">Bảo quản sản phẩm thế nào?<i class="fa-solid fa-plus float-right text-sage-600 transition group-open:rotate-45"></i></summary><p class="mt-3 text-sm leading-6 text-sage-800/70">Đặt trên khay thoát nước, ở nơi khô thoáng; tránh để bánh ngâm trong nước.</p></details><details class="group rounded-2xl bg-white p-5"><summary class="cursor-pointer font-semibold">Đây có phải cửa hàng đang hoạt động không?<i class="fa-solid fa-plus float-right text-sage-600 transition group-open:rotate-45"></i></summary><p class="mt-3 text-sm leading-6 text-sage-800/70">Đây là trang mô phỏng học tập. Giỏ hàng chưa kết nối thanh toán hay giao hàng thật.</p></details></div></div></section>
+
+    <section id="contact" class="scroll-mt-20 px-4 py-16 sm:px-6"><div class="max-w-7xl mx-auto rounded-[2rem] bg-sage-800 p-8 text-white sm:p-12"><div class="max-w-2xl"><p class="text-xs font-bold tracking-[.2em] text-sage-200">MỘT LÁ THƯ XANH</p><h2 class="serif mt-3 text-4xl sm:text-5xl">Nhận tin vui từ EcoBubble.</h2><p class="mt-4 leading-7 text-white/70">Đăng ký bản tin để cập nhật những câu chuyện nhỏ và ý tưởng sống xanh.</p><form id="newsletter-form" class="mt-6 flex flex-col sm:flex-row gap-3"><label for="email" class="sr-only">Địa chỉ email</label><input id="email" type="email" required placeholder="Email của bạn" class="focus-ring min-w-0 flex-1 rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder:text-white/50"><button class="rounded-xl bg-white px-6 py-3 font-semibold text-sage-900">Đăng ký <i class="fa-solid fa-arrow-right ml-2"></i></button></form><p class="mt-3 text-xs text-white/50">Bản demo: thông tin không được gửi hoặc lưu trên máy chủ.</p></div></div></section>
+
+    <footer class="border-t border-sage-100 bg-white/70 px-4 py-10 sm:px-6"><div class="max-w-7xl mx-auto grid sm:grid-cols-2 lg:grid-cols-4 gap-8"><div><a href="#" class="text-2xl font-bold text-sage-900"><i class="fa-solid fa-soap mr-2 text-sage-600"></i>EcoBubble</a><p class="mt-3 max-w-xs text-sm leading-6 text-sage-800/60">Chăm sóc dịu dàng, sống xanh mỗi ngày.</p></div><div><h3 class="font-bold text-sage-900">Khám phá</h3><div class="mt-3 grid gap-2 text-sm text-sage-800/65"><a href="#about">Câu chuyện</a><a href="#products">Sản phẩm</a><a href="#4no">Giá trị của chúng mình</a></div></div><div><h3 class="font-bold text-sage-900">Hỗ trợ</h3><div class="mt-3 grid gap-2 text-sm text-sage-800/65"><a href="#usage">Cách sử dụng</a><a href="#contact">Liên hệ</a><a href="mailto:hello@ecobubble.example">hello@ecobubble.example</a></div></div><div><h3 class="font-bold text-sage-900">Thông tin dự án</h3><p class="mt-3 text-sm leading-6 text-sage-800/60">Website minh họa học tập. Sản phẩm, giá bán và đánh giá là nội dung giả lập.</p></div></div><div class="max-w-7xl mx-auto mt-8 border-t border-sage-100 pt-5 text-xs text-sage-800/50">© <span id="year"></span> EcoBubble · Thiết kế với sự dịu dàng.</div></footer>
+
+    <aside id="cart-panel" class="fixed inset-y-0 right-0 z-[60] flex w-full max-w-md translate-x-full flex-col bg-cream shadow-2xl transition-transform duration-300" aria-label="Giỏ hàng" aria-hidden="true"><div class="flex items-center justify-between border-b border-sage-100 p-5"><div><h2 class="serif text-2xl">Giỏ hàng của bạn</h2><p id="cart-count" class="mt-1 text-xs text-sage-800/55">Chưa có sản phẩm</p></div><button onclick="toggleCart(false)" aria-label="Đóng giỏ hàng" class="focus-ring h-10 w-10 rounded-full bg-sage-100"><i class="fa-solid fa-xmark"></i></button></div><div id="cart-items" class="flex-1 space-y-3 overflow-y-auto p-5"></div><div class="border-t border-sage-100 bg-white p-5"><div class="flex justify-between text-sm"><span>Tạm tính</span><strong id="cart-total">0₫</strong></div><button id="checkout" class="mt-4 w-full rounded-xl bg-sage-700 py-3.5 font-semibold text-white disabled:opacity-40" disabled>Tiếp tục đặt hàng</button><p class="mt-2 text-center text-[11px] text-sage-800/50">Bản demo · Không thanh toán thật</p></div></aside><div id="cart-backdrop" class="invisible fixed inset-0 z-50 bg-sage-900/40 opacity-0 transition duration-300" onclick="toggleCart(false)" aria-hidden="true"></div>
+
+    <script>
+        const products = [
+            { id: 'citrus', name: 'Vườn sớm mai', note: 'Cam chanh · Tươi mát', type: 'fresh', price: 89000, tone: 'bg-[#dce8c5]', icon: 'fa-sun', desc: 'Hương cam chanh tươi sáng cho khởi đầu ngày mới.' },
+            { id: 'oat', name: 'Mây yến mạch', note: 'Yến mạch · Êm dịu', type: 'calm', price: 95000, tone: 'bg-[#e8dfc7]', icon: 'fa-cloud', desc: 'Cảm hứng từ những buổi sáng chậm rãi, bình yên.' },
+            { id: 'lavender', name: 'Chiều oải hương', note: 'Oải hương · Thư thái', type: 'calm', price: 99000, tone: 'bg-[#ded6e5]', icon: 'fa-spa', desc: 'Hương oải hương nhẹ nhàng cho phút giây thư giãn.' },
+            { id: 'rose', name: 'Nắng bên hiên', note: 'Hoa hồng · Mềm mại', type: 'fresh', price: 92000, tone: 'bg-[#efd9ca]', icon: 'fa-heart', desc: 'Một gợi ý thơm nhẹ để tự thưởng cho bản thân.' },
+            { id: 'gift-set', name: 'Bộ đôi gửi thương', note: '2 bánh · Gói quà giấy', type: 'gift', price: 159000, tone: 'bg-[#e6dccb]', icon: 'fa-gift', desc: 'Bộ quà tối giản, sẵn sàng trao tay người thương.' }
+        ];
+        const formatPrice = amount => new Intl.NumberFormat('vi-VN').format(amount) + '₫';
+        let cart = {};
+        try { cart = JSON.parse(localStorage.getItem('ecobubble-cart') || '{}') || {}; } catch { cart = {}; }
+        function saveCart() { try { localStorage.setItem('ecobubble-cart', JSON.stringify(cart)); } catch { /* Storage may be disabled. */ } }
+        function renderProducts(filter = 'all') {
+            const visible = products.filter(product => filter === 'all' || product.type === filter);
+            document.getElementById('product-grid').innerHTML = visible.map(product => `<article class="product-card rounded-3xl border border-sage-100 bg-white p-4"><div class="soap-art relative flex h-48 items-center justify-center overflow-hidden rounded-2xl"><span class="absolute left-3 top-3 rounded-full bg-white/80 px-3 py-1 text-[9px] font-bold tracking-widest text-sage-700">ECOBUBBLE</span><span class="soap ${product.tone} flex h-28 w-40 items-center justify-center -rotate-6"><span class="serif text-lg italic text-sage-800/65">${product.name}</span></span><i class="fa-solid ${product.icon} absolute bottom-4 right-4 text-sage-700/70"></i></div><p class="mt-4 text-[10px] font-bold uppercase tracking-widest text-sage-500">${product.note}</p><h3 class="serif mt-1 text-2xl text-sage-900">${product.name}</h3><p class="mt-2 min-h-10 text-sm leading-5 text-sage-800/60">${product.desc}</p><div class="mt-4 flex items-center justify-between"><strong class="text-sage-900">${formatPrice(product.price)}</strong><button type="button" class="add-product rounded-xl bg-sage-700 px-4 py-2.5 text-xs font-semibold text-white hover:bg-sage-800" data-id="${product.id}">Thêm <i class="fa-solid fa-plus ml-1"></i></button></div></article>`).join('');
+        }
+        function renderCart() {
+            const count = Object.values(cart).reduce((sum, qty) => sum + qty, 0), badge = document.getElementById('cart-badge');
+            badge.textContent = count; badge.classList.toggle('hidden', !count); badge.classList.toggle('flex', !!count);
+            const selected = products.filter(product => cart[product.id] > 0);
+            document.getElementById('cart-count').textContent = count ? `${count} sản phẩm trong giỏ` : 'Chưa có sản phẩm';
+            document.getElementById('cart-items').innerHTML = selected.length ? selected.map(product => `<div class="flex items-center gap-3 rounded-2xl border border-sage-100 bg-white p-3"><div class="soap-art flex h-14 w-14 shrink-0 items-center justify-center rounded-xl"><div class="soap ${product.tone} h-7 w-10 rounded-lg"></div></div><div class="min-w-0 flex-1"><strong class="block truncate text-sm text-sage-900">${product.name}</strong><span class="text-xs text-sage-700">${formatPrice(product.price)}</span><div class="mt-2 flex items-center gap-3"><button class="qty rounded-full bg-sage-100 px-2" data-id="${product.id}" data-step="-1" aria-label="Giảm số lượng">−</button><span class="text-xs font-bold">${cart[product.id]}</span><button class="qty rounded-full bg-sage-100 px-2" data-id="${product.id}" data-step="1" aria-label="Tăng số lượng">+</button></div></div><button class="remove-item p-2 text-sage-500 hover:text-red-700" data-id="${product.id}" aria-label="Xóa sản phẩm"><i class="fa-solid fa-trash-can"></i></button></div>`).join('') : '<div class="flex h-full flex-col items-center justify-center text-center text-sage-700/60"><i class="fa-solid fa-bag-shopping text-3xl"></i><p class="serif mt-4 text-2xl text-sage-900">Giỏ hàng đang trống</p><p class="mt-2 text-sm">Khám phá và chọn bánh xà phòng bạn thích nhé.</p></div>';
+            const total = selected.reduce((sum, product) => sum + product.price * cart[product.id], 0);
+            document.getElementById('cart-total').textContent = formatPrice(total); document.getElementById('checkout').disabled = !count;
+        }
+        let toastTimer;
+        function showToast(message) { const toast = document.getElementById('toast'); document.getElementById('toast-message').textContent = message; toast.classList.remove('translate-y-20', 'opacity-0'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 2200); }
+        function toggleCart(open = true) { const panel = document.getElementById('cart-panel'), backdrop = document.getElementById('cart-backdrop'); panel.classList.toggle('translate-x-full', !open); panel.setAttribute('aria-hidden', String(!open)); backdrop.classList.toggle('invisible', !open); backdrop.classList.toggle('opacity-0', !open); backdrop.setAttribute('aria-hidden', String(!open)); document.body.classList.toggle('overflow-hidden', open); }
+        function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
+        document.addEventListener('click', event => {
+            const add = event.target.closest('.add-product');
+            if (add) { const product = products.find(item => item.id === add.dataset.id); if (product) { cart[product.id] = (cart[product.id] || 0) + 1; saveCart(); renderCart(); showToast(`Đã thêm “${product.name}” vào giỏ!`); } }
+            const qty = event.target.closest('.qty'); if (qty) { const id = qty.dataset.id; cart[id] += Number(qty.dataset.step); if (cart[id] <= 0) delete cart[id]; saveCart(); renderCart(); }
+            const remove = event.target.closest('.remove-item'); if (remove) { delete cart[remove.dataset.id]; saveCart(); renderCart(); }
+        });
+        document.querySelectorAll('.filter-btn').forEach(button => button.addEventListener('click', () => { document.querySelectorAll('.filter-btn').forEach(item => { item.className = 'filter-btn rounded-full border border-sage-200 bg-white px-5 py-2.5 text-sm font-semibold'; }); button.className = 'filter-btn rounded-full bg-sage-800 px-5 py-2.5 text-sm font-semibold text-white'; renderProducts(button.dataset.filter); }));
+        document.querySelectorAll('#mobile-menu a').forEach(link => link.addEventListener('click', () => document.getElementById('mobile-menu').classList.add('hidden')));
+        document.getElementById('newsletter-form').addEventListener('submit', event => { event.preventDefault(); if (event.currentTarget.reportValidity()) { event.currentTarget.reset(); showToast('Cảm ơn bạn đã ghé thăm EcoBubble!'); } });
+        document.getElementById('checkout').addEventListener('click', () => { toggleCart(false); showToast('Đây là bản demo — chưa kết nối thanh toán.'); });
+        document.addEventListener('keydown', event => { if (event.key === 'Escape') toggleCart(false); });
+        document.getElementById('year').textContent = new Date().getFullYear();
+        if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) { const observer = new IntersectionObserver(entries => entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } }), { threshold: .12 }); document.querySelectorAll('.reveal').forEach(item => observer.observe(item)); } else { document.querySelectorAll('.reveal').forEach(item => item.classList.add('visible')); }
+        renderProducts(); renderCart();
+    </script>
+</body>
+</html>
